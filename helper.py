@@ -15,10 +15,9 @@ def user_top_5(model = None, review_df = None, user_id = None, movies = None):
     
     ### If the user is new ### 
     if((user_id not in review_df['userId'].unique()) | (user_id == None)):
-        print(user_id)
         average_ratings = review_df[['movieId','rating']].groupby(by= 'movieId').mean()              ## Group by movies with the average rating taken ## 
         print("New User Detected. Average top rated movies are as followed")                         ## Message the user with decision   ##
-        rec_movies = id_title(average_ratings.sort_values('rating', ascending= False).index[0:5])    ## Sort the value by rating and return the top 5 movies ##
+        rec_movies = id_title(average_ratings.sort_values('rating', ascending= False).index[0:5], movies)    ## Sort the value by rating and return the top 5 movies ##
         display(rec_movies)
         return None
     
@@ -74,25 +73,24 @@ def new_review(user_id, movie_id, rating, genres, title):
     reviews = reviews.append({'userId':user_id, 'movieId': movie_id, 'rating': rating},ignore_index= True)
     return reviews
     
-def add_movie(title, genre):
-    new_id = movie_id_list[-1] + 1
-    np.append(movie_id_list, new_id)
-    movies.append({'movieId':new_id, 'title':title, 'genres':genre}, ignore_index= True)
-                   
-        
+
 def add_review(new_review, original_df, movies_list):
     user_id_list = original_df.userId.unique()
-    ID = new_review['user_id']
-    if None in new_review.values():   ## If any values are missing ##
-        return 'Review is invalid and can not be added'   ## 
-    if ID not in user_id_list:       ## If the given ID is not in the list
-        ID = user_id_list[-1] + 1    ## Give a new ID number 
-        if new_review['user_id'] in user_id_list:
-            while new_review['user_id'] not in user_id_list:
-                new_review['user_id']+= 1
+    movie_id_list = movies_list.movieId.unique()
+         
+    if (new_review.get('user_id') == None) | (new_review['user_id'] not in user_id_list):
+        ID = user_id_list[-1] + 1                     ## Give a new ID number 
         print('New user number assignment: {}'.format(ID))
-
-    if new_review['movie_id'] not in movie_id_list:   ## If the movie
-        add_movie(new_review['user_id'],new_review['user_id'])
-    changed_df = original_df.append({'userId':new_review['user_id'], 'movieId': new_review['movie_id'], 'rating': new_review['rating']},ignore_index= True)
-    return changed_df
+    else:
+        ID = new_review['user_id']   ## Use the ID given if exist
+    
+    movie_id = new_review['movie_id']
+    
+    if movie_id not in movie_id_list:   ## If the movie is not in the movie dataframe
+        movie_id = movie_id_list[-1] + 1   ## Give a new ID from the movies list
+        new_movies_list = movies_list.append({'movieId':movie_id, 'title':new_review['title'], 'genres':new_review['genre']}, ignore_index= True)   ## Add the movies information to the movie dataframe
+    else:
+        new_movies_list = movies_list
+        
+    changed_df = original_df.append({'userId':ID, 'movieId': movie_id, 'rating': new_review['rating']},ignore_index= True)   ## Add the new review to the ratings dataframe
+    return changed_df, new_movies_list
