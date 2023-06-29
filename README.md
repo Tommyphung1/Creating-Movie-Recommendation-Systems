@@ -1,9 +1,9 @@
 # Phase 4 Project: Recommendation System
-**Source:** [MovieLens](https://grouplens.org/datasets/movielens/latest/)
+**Source:** [MovieLens](https://grouplens.org/datasets/movielens/latest/) <br>
 **Author:** Tommy Phung
 
 ## Overview 
-There are more than millions of movies made since first introduced. The normal person however has limited time to watch movies in their free time more than ever. To help consumers save time and money and companies give consumers the best experience, recommendations are made to make selection easier. To make these recommendations, we will be using a dataset of roughly **10,000 movie entries** to predict that a user would rate a given movie higher than those users with similar reviews on said movie. By comparing similar users and movie ratings, we should be able to recommend movies accurately. 
+There are more than millions of movies made since first introduced. The normal person however has limited time to watch movies in their free time more than ever. **To help consumers save time and money and companies give consumers the best experience**, recommendations are made to make selection easier. To make these recommendations, we will be using a dataset of roughly **10,000 movie entries** to predict that a user would rate a given movie higher than those users with similar reviews on said movie. By comparing similar users and movie ratings, we should be able to recommend movies accurately. 
 
 We attempt to use **memory-based modeling** and **model-based modeling** to fit the training set. **Peterson's similarity** appeared to perform the best for the Memory based models and was used to compare the others. Grid search was also used for both types to find the best combinations for each of the models. The final model used was the KNN Baseline algorithm
 
@@ -12,20 +12,17 @@ Lastly, there were **two ways** to recommend to users the top 5 movies. <br>
 The **second** way is to take the corresponding rank of the predicted values from the models and take **the average of the ratings from their sum**. The second way appear to be a better prediction than the previous models with a small difference in RSME. 
 
 ## Buiness Understanding
-
 There has been a boom in streaming services and thousands of movies for consumers to watch. Netflix has over **4,000 movies** and Prime Video has roughly **7,000 movies** not considering that these big streaming services have their original movies as well. To compete with other streaming platforms, the user experience should be the focus of these companies. <br>
+
 **One aspect to look into is the recommendation system they have on their website that would recommend movies to the users based on their movies, trending movies, and popular movies**. The user experience needs to entice old users to stay and welcome new users to join and begin watching movies. 
 
 Recommendation works well in most cases. On average, better-rated movies perform well and people will actively look for them before making their choice to watch said movie. For example, **70% of videos** watched are made from their recommendations. 
 
 ## Data Understanding
+The dataset was compiled by the **Grouplens** research group and the source of that data comes from [MovieLens](https://movielens.org/). MovieLens is a movie recommendation service that has **9,742 movies** and **100,836 ratings** from **610 users**. The dataset was updated on September 26, 2018. There are three datasets but will only be needing two of them, the ratings and the movies. 
 
-The dataset was compiled by the **Grouplens** research group and the source of that data comes [MovieLens](https://movielens.org/). MovieLens is a movie recommendation service that has **9,742 movies** and **100,836 ratings** from **610 users**. The dataset was updated on September 26, 2018. There are three datasets but will only be needing two of them, the ratings and the movies. 
-
-The movie dataset has the movie IDs, titles, and genres for the movie. This was used mainly for conversions but could potentially be used for the genres as it was explored for a bit. 
-Ratings have the most pieces of information as it has ratings and timestamps. The ratings were scaled from **0 to 5 with a .5 step**. 
-
-
+The movie dataset has the **movie IDs, titles, and genres** for the movie. This was used mainly for conversions but could potentially be used for the genres as it was explored for a bit. 
+Ratings dataset have the most pieces of information as it has ratings and timestamps. The ratings were scaled from **0 to 5 with a .5 step**. 
 
 Exploring the datasets have some interesting facts concerning the dataset. For one, the distribution is slightly skewed left with the **mean** rating happening to be roughly **3.5**. There are a handful of users that contributes to the reviews given which may have bias depending on who the user was. **Most movies were not rated below 3** so it might be difficult to determine a good movie to recommend.  
 
@@ -50,13 +47,11 @@ We used surprise libraries to create a recommendation system using different alg
 | KnnBaseline | .8883 | **.8753**  |
 | SVD         | .8833 | **.8780**  |
 
-There was a slight difference between the Baseline version and the SVD model. KnnBaseline perform slightly better and was used for this project. 
-
+There was a **slight difference** between the Baseline version and the SVD model. **KnnBaseline** perform slightly better and was used for this project. 
 
 ## User Example 1 Recommendation
 Example of the model working to provide recommendation based on the user given.
-Both of the graphs are from the model's prediction with the watched movies removed. 
-Id is still used for readabilty. 
+Both of the recommendations are from the model's prediction with the watched movies removed. 
 
 | Weighted Ranks Sum  | Average Ratings Movies |   |
 |---------|-------------------|---|
@@ -69,7 +64,6 @@ Id is still used for readabilty.
 
 **Three of the Five** movies are in both list with the new methods. However, we can show that the average ranks have a **better RSME** than the previous two models.  
 
-
 ## Comparison Analysis
 From the predicted ratings for user 1, we can see **a slight difference** in user similarity vs item similarity between movies. Interestingly, the item comparison has all the movies rated above three which goes inside with user 1 trend on rating movies. User 1 doesn't seem so **rate movies lower than three** often and therefore most movies would be rated similarly. Due to the number of users, there is a bigger disparity between users with the movies they watched naturally. 
 
@@ -77,6 +71,14 @@ From the predicted ratings for user 1, we can see **a slight difference** in use
 |            | **Knn_Baseline_user** | **Knn_Baseline_item** | **Combined Rating** |
 |------------|:---------------------:|:---------------------:|:-------------------:|
 | RSME Score | .8776                 | .8899                 | **.8708**           |
+
+## Conclusion 
+Two models were created to help recommend the best types of movies to a given user. The first model is based off the similarities of users and the movies they like. The idea would be that a users have similar likes and dislike and should be recommended to them. They should rate the movies similairly. The second model compare the ratings from movies and compare them to similar rated movies. If the movies have similar ratings from one another, a user may rate that movie similar as well. Both of the models didn't perfrom well with a .8776 and .8899 RSME score. RSME score gives an average rating that the predicted values gave from the true value. That would mean that a movie was rated on average higher by .87 to .89 more than the true values. In the attempt to see if combining the models together, there was a slight increase in predictions but not much. 
+
+In order to better the model, some measure were placed when dealing with cold starts. Cold starts are sictuatuions to a given system that need some help to get started before being implemetned correctly. 
+The first cold start to consider is a new user. Since there are no prior ratings from the user, there is no way to recommend movies with the current system. Two different solutions are to recommend the most popular movies or attempt to grab more information from the user to get a some sort of preference of a movie. 
+
+The second cold start to consider is a new movie. A new movie will not have any users that have watched and rated the movie yet. Therefore, the system would never recommend the movie with the current system. To help remedy this, we implemented a content based filtering that help pick movies if the user have similar interest in the genre given to the new movie. Since we have a history of movie and their genres, we can still compare them for the users. 
 
 ## Limitations
 This model isn't without its limitations as several aspects make the model less effective.
@@ -91,6 +93,12 @@ There are also some ways to improve the model that can be added to the project t
 1. The movie dataset had genres as a column. A previous project shows that **certain combinations perform better at the box office**. If we can incorporate this in the model and know what the users' favorite genres are. 
 2. **More data will improve the model**. There was a bigger dataset that was also created and could be used, with enough time, for a better model. 
 3. The data should include more ratings with a **wider range of ratings** from the users. Ideally should be a bell curve depending on if an equal number of bad and good movies are included in the movies list. 
+
+## For More Information
+
+Please review our full analysis in [Jupyter Notebook](main_notebook.ipynb) or the [presentation](./presentation_4.pdf).
+
+For any additional questions, please contact **Tommy Phung, phungtommy109@gmail.com**
 
 ## Repository Structure
 ```
