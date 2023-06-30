@@ -64,52 +64,55 @@ def create_ranked_df(user_list, item_list, movie_list):
     
     return final_df
 
-def new_movie(new_genres, movies_list, ratings_list):
-    """
-    Function that takes the genres from a new movie and give it a rating based off the genres given. 
-    ______________________________
-    Input - new_genres (list) 
-          - movies_list (list) 
-          - ratings_list (Dataframe)
-    Output - mean (value) 
-    ______________________________
-    If the movie genre is not in the movies list, the average rating would be returned instead. 
+## Useable functions that can add users and movies to the dataset
+# def new_movie(new_genres, movies_list, ratings_list):
+#     """
+#     Function that takes the genres from a new movie and give it a rating based off the genres given. 
+#     ______________________________
+#     Input - new_genres (list) 
+#           - movies_list (list) 
+#           - ratings_list (Dataframe)
+#     Output - mean (value) 
+#     ______________________________
+#     If the movie genre is not in the movies list, the average rating would be returned instead. 
     
-    """
-    ## Check if there are similar genres already in the list ## 
-    if new_genres not in movies_list.genres.unique():
-        print('Genre/s not found in movies list: {}'.format(new_genres))   
-        return ratings_list.rating.mean()   ## If not, return the mean rating of all movies ## 
-    print('Genre Detected: {}'.format(new_genres))
-    genre_list = movies_list.loc[movies_list['genres'] == new_genres]['movieId'].values   ## If found, return the rating for the genres average  
-    return ratings_list.loc[ratings_list['movieId'].isin(genre_list)]['rating'].mean()
+#     """
+#     ## Check if there are similar genres already in the list ## 
+#     if new_genres not in movies_list.genres.unique():
+#         print('Genre/s not found in movies list: {}'.format(new_genres))   
+#         return ratings_list.rating.mean()   ## If not, return the mean rating of all movies ## 
+#     print('Genre Detected: {}'.format(new_genres))
+#     genre_list = movies_list.loc[movies_list['genres'] == new_genres]['movieId'].values   ## If found, return the rating for the genres average  
+#     return ratings_list.loc[ratings_list['movieId'].isin(genre_list)]['rating'].mean()
     
-def new_review(user_id, movie_id, rating, genres, title):
-    if user_id not in user_list:
-        np.append(user_list, user_id)
-    if movie_id not in movie_id_list:
-        add_movie(title,genres)
-    reviews = reviews.append({'userId':user_id, 'movieId': movie_id, 'rating': rating},ignore_index= True)
-    return reviews
+    
+    
+# def new_review(user_id, movie_id, rating, genres, title):
+#     if user_id not in user_list:
+#         np.append(user_list, user_id)
+#     if movie_id not in movie_id_list:
+#         add_movie(title,genres)
+#     reviews = reviews.append({'userId':user_id, 'movieId': movie_id, 'rating': rating},ignore_index= True)
+#     return reviews
     
 
-def add_review(new_review, original_df, movies_list):
-    user_id_list = original_df.userId.unique()
-    movie_id_list = movies_list.movieId.unique()
+# def add_review(new_review, original_df, movies_list):
+#     user_id_list = original_df.userId.unique()
+#     movie_id_list = movies_list.movieId.unique()
          
-    if (new_review.get('user_id') == None) | (new_review['user_id'] not in user_id_list):
-        ID = user_id_list[-1] + 1                     ## Give a new ID number 
-        print('New user number assignment: {}'.format(ID))
-    else:
-        ID = new_review['user_id']   ## Use the ID given if exist
+#     if (new_review.get('user_id') == None) | (new_review['user_id'] not in user_id_list):
+#         ID = user_id_list[-1] + 1                     ## Give a new ID number 
+#         print('New user number assignment: {}'.format(ID))
+#     else:
+#         ID = new_review['user_id']   ## Use the ID given if exist
     
-    movie_id = new_review['movie_id']
+#     movie_id = new_review['movie_id']
     
-    if movie_id not in movie_id_list:   ## If the movie is not in the movie dataframe
-        movie_id = movie_id_list[-1] + 1   ## Give a new ID from the movies list
-        new_movies_list = movies_list.append({'movieId':movie_id, 'title':new_review['title'], 'genres':new_review['genre']}, ignore_index= True)   ## Add the movies information to the movie dataframe
-    else:
-        new_movies_list = movies_list
+#     if movie_id not in movie_id_list:   ## If the movie is not in the movie dataframe
+#         movie_id = movie_id_list[-1] + 1   ## Give a new ID from the movies list
+#         new_movies_list = movies_list.append({'movieId':movie_id, 'title':new_review['title'], 'genres':new_review['genre']}, ignore_index= True)   ## Add the movies information to the movie dataframe
+#     else:
+#         new_movies_list = movies_list
         
-    changed_df = original_df.append({'userId':ID, 'movieId': movie_id, 'rating': new_review['rating']},ignore_index= True)   ## Add the new review to the ratings dataframe
-    return changed_df, new_movies_list
+#     changed_df = original_df.append({'userId':ID, 'movieId': movie_id, 'rating': new_review['rating']},ignore_index= True)   ## Add the new review to the ratings dataframe
+#     return changed_df, new_movies_list
