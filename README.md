@@ -50,35 +50,39 @@ We used surprise libraries to create a recommendation system using different alg
 There was a **slight difference** between the Baseline version and the SVD model. **KnnBaseline** perform slightly better and was used for this project. 
 
 ## User Example 1 Recommendation
-Example of the model working to provide recommendation based on the user given.
-Both of the recommendations are from the model's prediction with the watched movies removed. 
+### Individual Results 
+The **Top movies** for these methods are as followed for user 1:
 
-| Weighted Ranks Sum  | Average Ratings Movies |   |
-|---------|-------------------|---|
-| **'Shawshank Redemption, The (1994)'** | **'Shawshank Redemption, The (1994)'**  |   |
-| **'Sunset Blvd. (a.k.a. Sunset Boulevard) (1950)'**  | **'Sunset Blvd. (a.k.a. Sunset Boulevard) (1950)'**   |   |
-| **'Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb (1964)'** | **'Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb (1964)'** |   |
-| 'Ghost in the Shell (Kôkaku kidôtai) (1995)' | 'Lord of the Rings: The Fellowship of the Ring, The (2001)' |   |
-| 'Wallace & Gromit: The Best of Aardman Animation (1996)'  | 'High Noon (1952)'                            |   |
-|     |                                                                                   |   |
+| Weighted Ranks Sum | Average Ratings Movies | Includes Favorite Genres |
+|:---:|:---:|:---:|
+| **'Shawshank Redemption, The (1994)'** | **'Shawshank Redemption, The (1994)'** | **Ghost in the Shell (Kôkaku kidôtai) (1995)** |
+| **'Sunset Blvd. (a.k.a. Sunset Boulevard) (1950)'** | **'Sunset Blvd. (a.k.a. Sunset Boulevard) (1950)'** | Singin' in the Rain (1952) |
+| **'Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb (1964)'** | **'Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb (1964)'** | Notorious (1946) |
+| **'Ghost in the Shell (Kôkaku kidôtai) (1995)'** | 'Lord of the Rings: The Fellowship of the Ring, The (2001)' | Sicario (2015) |
+| 'Wallace & Gromit: The Best of Aardman Animation (1996)' | 'High Noon (1952)' | Big Short, The (2015) |
 
-**Three of the Five** movies are in both list with the new methods. However, we can show that the average ranks have a **better RSME** than the previous two models.  
+Some similar movies were suggested but there is no way to tell whether a user would like the recommendation that was created. <br> 
+**The weighted ranked** recommendations consider all the movies and their respective ranking to give a **more diverse spread**. <br> 
+**The average ratings** make sure that **only highly rated movies** are shown as a recommendation from the prediction ratings. <br> 
+Using their **favorite genre** can filter out movies they wouldn't normally watch with ones that they are **familiar** with. 
 
 ## Comparison Analysis
-From the predicted ratings for user 1, we can see **a slight difference** in user similarity vs item similarity between movies. Interestingly, the item comparison has all the movies rated above three which goes inside with user 1 trend on rating movies. User 1 doesn't seem so **rate movies lower than three** often and therefore most movies would be rated similarly. Due to the number of users, there is a bigger disparity between users with the movies they watched naturally. 
-
+Comparing all the models, there is a **slight improvement** in the RSME score with the combined ratings of the item and user models. <br>
+This could be interpreted that a combination of filtering can lead to a better score which in turn gives more **accurate** ratings. 
 
 |            | **Knn_Baseline_user** | **Knn_Baseline_item** | **Combined Rating** |
 |------------|:---------------------:|:---------------------:|:-------------------:|
-| RSME Score | .8776                 | .8899                 | **.8708**           |
+| RSME Score | .8776                 | .8887                | **.8717**           |
 
 ## Conclusion 
-Two models were created to help recommend the best types of movies to a given user. The first model is based off the similarities of users and the movies they like. The idea would be that a users have similar likes and dislike and should be recommended to them. They should rate the movies similairly. The second model compare the ratings from movies and compare them to similar rated movies. If the movies have similar ratings from one another, a user may rate that movie similar as well. Both of the models didn't perfrom well with a .8776 and .8899 RSME score. RSME score gives an average rating that the predicted values gave from the true value. That would mean that a movie was rated on average higher by .87 to .89 more than the true values. In the attempt to see if combining the models together, there was a slight increase in predictions but not much. 
+Two models were created to help recommend the **best types of movies to a given user**. <br> 
+The **first** model is based on the **similarities of users** and the movies they like. The idea would be that users have similar likes and dislike and should be recommended to them. They should rate the movies similarly. <br> 
+The **second** model compares the ratings from movies and **compares them to similar-rated movies**. If the movies have similar ratings from one another, a user may rate that movie similarly as well. Both of the models didn't perform well with a **.8776 and .8899 RSME score**. <br> RSME score gives an average rating that the predicted values gave from the true value. That would mean that a movie was rated on average higher by **.87 to .89** more than the true values. In the attempt to see if **combining the models together**, there was a slight increase in predictions but not much. 
 
-In order to better the model, some measure were placed when dealing with cold starts. Cold starts are sictuatuions to a given system that need some help to get started before being implemetned correctly. 
-The first cold start to consider is a new user. Since there are no prior ratings from the user, there is no way to recommend movies with the current system. Two different solutions are to recommend the most popular movies or attempt to grab more information from the user to get a some sort of preference of a movie. 
+In order to better the model, some measures were placed when dealing with cold starts. **Cold starts** are situations in a given system that need some help to get started before being implemented correctly. 
+The **first** cold start to consider is a new user. Since there are **no prior ratings** from the user, there is no way to recommend movies with the current system. Two different solutions are to recommend the **most popular movies** or attempt to grab more information from the user to get some sort of preference for a movie. 
 
-The second cold start to consider is a new movie. A new movie will not have any users that have watched and rated the movie yet. Therefore, the system would never recommend the movie with the current system. To help remedy this, we implemented a content based filtering that help pick movies if the user have similar interest in the genre given to the new movie. Since we have a history of movie and their genres, we can still compare them for the users. 
+The **second** cold start to consider is a new movie. **A new movie** will not have any users that have watched and rated the movie yet. Therefore, the system would **never recommend** the movie with the current system. To help remedy this, we implemented **content-based filtering** that helps pick movies if the user has a similar interest in the genre given to the new movie. Since we have **a history of movies and their genres**, we can still compare them for the users. 
 
 ## Limitations
 This model isn't without its limitations as several aspects make the model less effective.
