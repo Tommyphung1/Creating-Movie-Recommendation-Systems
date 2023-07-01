@@ -64,29 +64,40 @@ def create_ranked_df(user_list, item_list, movie_list):
     
     return final_df
 
-## Useable functions that can add users and movies to the dataset
-# def new_movie(new_genres, movies_list, ratings_list):
-#     """
-#     Function that takes the genres from a new movie and give it a rating based off the genres given. 
-#     ______________________________
-#     Input - new_genres (list) 
-#           - movies_list (list) 
-#           - ratings_list (Dataframe)
-#     Output - mean (value) 
-#     ______________________________
-#     If the movie genre is not in the movies list, the average rating would be returned instead. 
+def get_genres(id_list, movies_list):
+    '''
+    Grab genres from a list of movie IDs and return the unique list of genres
+    ______________________________
+    Input - id_list (list) 
+          - movies_list (Dataframe) 
+    Output - list (list) 
+    ______________________________
+    '''
+    return movies_list.loc[movies_list['movieId'].isin(id_list)].genres.unique()
+
+
+def new_movie(new_genres, movies_list, ratings_list):
+    """
+    Function that takes the genres from a new movie and give it a rating based off the genres given. 
+    ______________________________
+    Input - new_genres (list) 
+          - movies_list (list) 
+          - ratings_list (Dataframe)
+    Output - mean (value) 
+    ______________________________
+    If the movie genre is not in the movies list, the average rating would be returned instead. 
     
-#     """
-#     ## Check if there are similar genres already in the list ## 
-#     if new_genres not in movies_list.genres.unique():
-#         print('Genre/s not found in movies list: {}'.format(new_genres))   
-#         return ratings_list.rating.mean()   ## If not, return the mean rating of all movies ## 
-#     print('Genre Detected: {}'.format(new_genres))
-#     genre_list = movies_list.loc[movies_list['genres'] == new_genres]['movieId'].values   ## If found, return the rating for the genres average  
-#     return ratings_list.loc[ratings_list['movieId'].isin(genre_list)]['rating'].mean()
+    """
+    ## Check if there are similar genres already in the list ## 
+    if new_genres not in movies_list.genres.unique():
+        print('Genre/s not found in movies list: {}'.format(new_genres))   
+        return ratings_list.rating.mean()   ## If not, return the mean rating of all movies ## 
+    print('Genre Detected: {}'.format(new_genres))
+    genre_list = movies_list.loc[movies_list['genres'] == new_genres]['movieId'].values   ## If found, return the rating for the genres average  
+    return ratings_list.loc[ratings_list['movieId'].isin(genre_list)]['rating'].mean()
     
     
-    
+## Useable functions that can add users and movies to the dataset    
 # def new_review(user_id, movie_id, rating, genres, title):
 #     if user_id not in user_list:
 #         np.append(user_list, user_id)
